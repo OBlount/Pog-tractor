@@ -7,4 +7,4 @@ A tool that can calculate the _'pog-rate'_ of a [Twitch](https://www.twitch.tv/)
 * :pushpin: Listen to any streamers chat
 * :pushpin: Create the 'pog' formula
 * :pushpin: Display data in a graphical way
-* :pushpin: Alert when there is a `streamer moment` with 'clip-able' potential
+* :pushpin: Alert when there is a _streamer moment_ with _'clip-able'_ potential
