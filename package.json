@@ -1,11 +1,11 @@
 {
   "name": "pog-tractor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Calculates the pog rate of a streamer's chat",
-  "main": "Pog-tractor",
+  "main": "server.js",
   "scripts": {
     "start": "node ./dist/server.js",
-    "dev": "nodemon ./dist/pog-tractor.js",
+    "dev": "nodemon ./dist/server.js",
     "build": "tsc -p ."
   },
   "keywords": [

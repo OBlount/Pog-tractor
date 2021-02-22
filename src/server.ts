@@ -1,5 +1,7 @@
 import { Application, Request, Response } from 'express';
 import path = require('path');
+import { Config } from '../@types/index';
+import { CreateTmiClient } from './pog-tractor';
 
 import express = require('express');
 const server: Application = express();
@@ -10,5 +12,20 @@ server.get('/', (req: Request, res: Response) => {
 })
 
 server.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+    console.log(`[PROCCESS] Local server listening at http://localhost:${port}`);
 })
+
+// Test Config
+const testConfig: Config = {
+    options: {
+        clientId: 'Test123',
+        debug: true
+    },
+    connection: {
+        reconnect: true,
+        secure: true,
+    },
+    channels: [  ]
+}
+
+let client = CreateTmiClient(testConfig);
