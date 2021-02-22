@@ -1,10 +1,10 @@
 {
   "name": "pog-tractor",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Calculates the pog rate of a streamer's chat",
-  "main": "/dist/pog-tractor.js",
+  "main": "Pog-tractor",
   "scripts": {
-    "start": "node /dist/pog-tractor.js",
+    "start": "node ./dist/server.js",
     "dev": "nodemon ./dist/pog-tractor.js",
     "build": "tsc -p ."
   },
@@ -14,9 +14,11 @@
   "author": "Owen Blount",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.17.1",
     "tmi.js": "^1.7.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.11",
     "@types/node": "^14.14.31",
     "@types/tmi.js": "^1.7.1",
     "nodemon": "^2.0.7",
