@@ -1,14 +1,14 @@
+import express = require('express');
 import { Application, Request, Response } from 'express';
-import path = require('path');
 import { Config } from '../@types/index';
 import { CreateTmiClient } from './pog-tractor';
+require('dotenv').config();
 
-import express = require('express');
 const server: Application = express();
-const port: number = 5050;
+const port = process.env.PORT || 8081;
 
 server.get('/', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../public/views/index.html'));
+    res.send('HELLO WORLD');
 })
 
 server.listen(port, () => {
@@ -19,7 +19,7 @@ server.listen(port, () => {
 const testConfig: Config = {
     options: {
         clientId: 'Test123',
-        debug: true
+        debug: false
     },
     connection: {
         reconnect: true,
