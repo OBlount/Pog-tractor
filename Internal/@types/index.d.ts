@@ -1,8 +1,7 @@
 // The Pog Obj
 export interface Pog {
     channelName: string;
-    pogCount: number;
-    time: number;
+    pogRate: number;
 }
 
 // For Client Configs for a tmi.js client
