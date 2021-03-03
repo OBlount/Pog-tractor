@@ -1,5 +1,5 @@
 import { Client } from 'tmi.js';
-import { Pog, Config } from '../@types/index';
+import { Config } from '../@types/index';
 import tmi = require('tmi.js');
 
 export function CreateTmiClient(clientConfig: Config): Client {

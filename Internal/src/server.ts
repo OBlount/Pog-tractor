@@ -1,12 +1,11 @@
 import express = require('express');
-import { Application, Request, Response } from 'express';
+import { Application } from 'express';
 import bodyParser = require('body-parser');
 import cors = require('cors');
-import { Config } from '../@types/index';
-import { CreateTmiClient } from './pog-tractor';
 import routes from './routes';
-require('dotenv').config();
-require('./routes');
+import { Config } from '../@types';
+import { CreateTmiClient } from './pog-tractor';
+require('dotenv').config({path: '../.env'});
 
 // Configure an express application
 const server: Application = express();
@@ -22,8 +21,8 @@ server.listen(port, () => {
     console.log(`[PROCCESS] Local server listening at http://localhost:${port}`);
 })
 
-// Test Config
-const testConfig: Config = {
+// Test/temp config
+const tmiTestConfig: Config = {
     options: {
         clientId: 'Test123',
         debug: false
@@ -32,7 +31,9 @@ const testConfig: Config = {
         reconnect: true,
         secure: true,
     },
-    channels: [  ]
+    channels: [ ]
 }
 
-let client = CreateTmiClient(testConfig);
+// Create one TMI client with empty channels
+const liveClient = CreateTmiClient(tmiTestConfig);
+export { liveClient };
