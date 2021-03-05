@@ -1,5 +1,5 @@
 import { Client } from 'tmi.js';
-import { Config } from '../@types/index';
+import { Config } from '../../@types/index';
 import tmi = require('tmi.js');
 
 const re: string = '^[a-zA-Z0-9_]{4,25}$';

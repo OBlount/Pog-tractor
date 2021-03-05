@@ -3,7 +3,7 @@ import { Application } from 'express';
 import bodyParser = require('body-parser');
 import cors = require('cors');
 import routes from './routes';
-import { Config } from '../@types';
+import { Config } from '../../@types';
 import { CreateTmiClient } from './pog-tractor';
 require('dotenv').config({path: '../.env'});
 
