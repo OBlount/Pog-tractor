@@ -1,7 +1,21 @@
 import Api from '@/services/Api';
 
 export default {
-    AddToChannelPool(channelNames: {channelName: string}) {
-        return Api().post('channelPost', channelNames);
+    AddToChannelPool(channelName: {channelName: string}) {
+        try {
+            return Api().post('addChannelToClient', channelName);
+        }
+        catch {
+            console.log(`[ERROR] Can't reach '${Api().getUri()}'`);
+        }
+    },
+
+    DeleteChannelFromClient(channelName: {channelName: string}) {
+        try {
+            return Api().post('deleteChannelFromClient', channelName);
+        }
+        catch {
+            console.log(`[ERROR] Can't reach '${Api().getUri()}'`);
+        }
     }
 }

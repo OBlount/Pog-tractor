@@ -18,7 +18,7 @@ const port: string | number = process.env.PORT || 8081;
 routes(server);
 
 server.listen(port, () => {
-    console.log(`[PROCCESS] Local server listening at http://localhost:${port}`);
+    console.log(`[PROCESS] Local server listening at http://localhost:${port}`);
 })
 
 // Test/temp config

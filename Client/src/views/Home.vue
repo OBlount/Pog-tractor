@@ -9,13 +9,19 @@
         @keyup.enter="SubmitChannelNames()">
 
         <button @click="SubmitChannelNames()">Submit</button>
+
+        <ul class="TrackersList">
+            <li class="TrackersList" v-for="(trackerName, index) in $store.state.LiveTrackers" :key="index">
+                <Tracker :channelName="trackerName"/>
+            </li>
+        </ul>   
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import Tracker from '@/components/TrackerComponent.vue';
-import Services from '@/services/session'
+import Services from '@/services/session';
 
 @Component({
   components: {
@@ -25,12 +31,29 @@ import Services from '@/services/session'
 export default class Home extends Vue {
     private inputChannelValue: string = '';
 
-    private async SubmitChannelNames() {
+    private async SubmitChannelNames(): Promise<void> {
         const res = await Services.AddToChannelPool({
             channelName: this.inputChannelValue
         })
-        console.log(res.data);
+
+        const currentStatusCode: number = res?.data.stcode;
+        const currentStatusMsg: string = res?.data.stmsg;
+        if (currentStatusCode === 200) {
+            console.log(currentStatusMsg);
+            this.$store.state.LiveTrackers.push(this.inputChannelValue);
+        }
+
+        else if (currentStatusCode === 500) {
+            console.log(currentStatusMsg);
+        }
+
         this.inputChannelValue = '';
     }
 }
 </script>
+
+<style scoped>
+.TrackersList {
+    list-style-type: none;
+}
+</style>

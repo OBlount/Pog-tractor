@@ -1,26 +1,40 @@
 <template>
     <div class="Tracker">
         <img id="DeleteButton" src="@/assets/DeleteButton.png" alt="Delete" @click="OnDelete()">
-        <img class="TwtichAvt" alt="Twitch Avatar" :src="twitchAvt">
         <div class="TrackerContent">
             <a target="_blank" :href="twitchLink">{{ channelName }}</a>
             <p>Pog Rate: {{ pogRate }}</p>
+            <!-- Future reference when implementing chart.js -->
+            <canvas id="PogChart"></canvas>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component,  } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import Services from '@/services/session';
 
 @Component
 export default class Tracker extends Vue {
-    private twitchAvt: string = '';
-    private channelName: string = 'Channel-Name';
+    @Prop() public channelName!: string;
+    @Prop() private pogRate!: number;
     private twitchLink: string = 'https://www.twitch.tv/' + this.channelName;
-    private pogRate: number = 0;
 
-    public OnDelete(): void {
-		console.log('[Implement Delete function]')
+    private async OnDelete(): Promise<void> {
+        const res = await Services.DeleteChannelFromClient({
+            channelName: this.channelName
+        })
+
+        const currentStatusCode: number = res?.data.stcode;
+        const currentStatusMsg: string = res?.data.stmsg;
+        if (currentStatusCode === 200) {
+            console.log(currentStatusMsg);
+            this.$store.dispatch('REMOVE_TRACKER', this.channelName);
+        }
+
+        else if (currentStatusCode === 500) {
+            console.log(currentStatusMsg);
+        }
     }
 }
 </script>
@@ -29,7 +43,7 @@ export default class Tracker extends Vue {
     .Tracker {
         position: relative;
         display: grid;
-        grid-template-columns: 5% 10% auto;
+        grid-template-columns: 30px auto;
         grid-auto-flow: column;
         align-items: center;
         left: 25%;
@@ -52,9 +66,10 @@ export default class Tracker extends Vue {
         justify-items: center;
     }
 
-    .TwtichAvt {
-        max-height: 70px;
-        max-width: 70px;
+    #PogChart {
+        background-color: aliceblue;
+        width: 100%;
+        height: 82px;
     }
 
     #DeleteButton {
