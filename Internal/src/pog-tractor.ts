@@ -16,7 +16,7 @@ export function CreateTmiClient(clientConfig: Config): Client {
 
 	// Assign defualt values if needed:
 	let actualServer: string = client.getOptions().connection?.server || defaultServer;
-	let actualPort;
+	let actualPort: number;
 
 	if (client.getOptions().connection?.secure) {
 		actualPort = defaultSecurePort;
@@ -38,19 +38,21 @@ export async function AddChannelToPool(client: Client, channelName: string): Pro
 	console.log(`[PROCESS] Preparing to add ${channelName} to listener`);
 	const channelListBuffer: string[] = client.getChannels();
 
+	// Make sure the requested channel name is to Twitch username standards:
 	if (channelName.search(re) === 0) {
 		isToTwitchUsernameStandard = true;
 	}
 
 	if (isToTwitchUsernameStandard) {
+		// Checks if the channel is already in the channel name pool:
 		if (channelListBuffer.includes(`#${channelName.toLowerCase()}`) === false) {
 			try {
 				await client.join(channelName);
 				successfulAttempt = true;
 			}
 			catch(e) {
-				console.log(`[ERROR] Couldn't connect to the chat: ${channelName}\n\r'${e}' - Perhaps the channel doesn't exist`)
-				successfulAttempt = false
+				console.log(`[ERROR] Couldn't connect to the chat: ${channelName}\n\r'${e}' - Perhaps the channel doesn't exist`);
+				successfulAttempt = false;
 			}
 		}
 	}
@@ -71,6 +73,7 @@ export function RemoveChannelFromPool(client: Client, channelName: string): bool
 	console.log(`[PROCESS] Preparing to remove ${channelName} from listener`);
 	const channelListBuffer: string[] = client.getChannels();
 
+	// Makes sure the channel name requested is actually in the channel name pool:
 	channelListBuffer.forEach(channelNameInList => {
 		if ((channelNameInList).toLowerCase() === (`#${channelName}`).toLowerCase()) {
 			try {
@@ -78,7 +81,7 @@ export function RemoveChannelFromPool(client: Client, channelName: string): bool
 				successfulAttempt = true;
 			}
 			catch(e) {
-				console.log(`[ERROR] Couldn't remove the channel: ${channelName}\n\r'${e}'`)
+				console.log(`[ERROR] Couldn't remove the channel: ${channelName}\n\r'${e}'`);
 				successfulAttempt = false;
 			}
 		}

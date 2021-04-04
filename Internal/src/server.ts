@@ -1,6 +1,5 @@
 import express = require('express');
 import { Application } from 'express';
-import bodyParser = require('body-parser');
 import cors = require('cors');
 import routes from './routes';
 import { Config } from '../../@types';
@@ -9,10 +8,11 @@ require('dotenv').config({path: '../.env'});
 
 // Configure an express application
 const server: Application = express();
-server.use(bodyParser.json());
+server.use(express.urlencoded({ extended: true }));
+server.use(express.json());
 server.use(cors());
 
-const port: string | number = process.env.PORT || 8081;
+const port: string | number = process.env.EXPRESS_PORT || 8081;
 
 // Import the routes here
 routes(server);

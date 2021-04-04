@@ -6,7 +6,12 @@ const serverOnBootTime: string = new Date().toLocaleString();
 
 export default (server: Application) => {
     server.get('/', (req, res) => {
-        res.send(`<h1>Server Online</h1><br> Booted on the: ${serverOnBootTime}`);
+        const allChannels: string[] = liveClient.getChannels();
+
+        res.send(`<h1>Server Online</h1><br>
+        <p>Booted on the: ${serverOnBootTime}</p><br>
+        <p>Channels in the pool:</p><br>
+        ${allChannels}`);
     })
 
     server.post('/addChannelToClient', async (req, res) => {
