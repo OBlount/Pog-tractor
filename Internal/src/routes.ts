@@ -1,6 +1,6 @@
 import { Application } from 'express';
 import { liveClient } from './server';
-import { AddChannelToPool, RemoveChannelFromPool } from './pog-tractor';
+import { AddChannelToPool } from './pog-tractor';
 
 const serverOnBootTime: string = new Date().toLocaleString();
 
@@ -31,28 +31,6 @@ export default (server: Application) => {
             res.send({
                 stcode: 500,
                 stmsg: `Failed to add: ${channelNameInput}`,
-                totalNumChannels: liveClientChannelLength
-            })
-        }
-    })
-
-    server.post('/deleteChannelFromClient', (req, res) => {
-        const deletedChannel: string = req.body.channelName;
-        let liveClientChannelLength: number = liveClient.getChannels().length;
-        const isSuccess: boolean = RemoveChannelFromPool(liveClient, deletedChannel);
-
-        if (isSuccess) {
-            res.send({
-                stcode: 200,
-                stmsg: `DELETED: ${deletedChannel}`,
-                totalNumChannels: liveClientChannelLength - 1
-            })
-        }
-
-        else {
-            res.send({
-                stcode: 500,
-                stmsg: `Failed to delete: ${deletedChannel}`,
                 totalNumChannels: liveClientChannelLength
             })
         }

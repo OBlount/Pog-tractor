@@ -21,20 +21,8 @@ export default class Tracker extends Vue {
     private twitchLink: string = 'https://www.twitch.tv/' + this.channelName;
 
     private async OnDelete(): Promise<void> {
-        const res = await Services.DeleteChannelFromClient({
-            channelName: this.channelName
-        })
-
-        const currentStatusCode: number = res?.data.stcode;
-        const currentStatusMsg: string = res?.data.stmsg;
-        if (currentStatusCode === 200) {
-            console.log(currentStatusMsg);
-            this.$store.dispatch('REMOVE_TRACKER', this.channelName);
-        }
-
-        else if (currentStatusCode === 500) {
-            console.log(currentStatusMsg);
-        }
+        this.$store.dispatch('REMOVE_TRACKER', this.channelName);
+        console.log(`DELETED: ${this.channelName}`);
     }
 }
 </script>

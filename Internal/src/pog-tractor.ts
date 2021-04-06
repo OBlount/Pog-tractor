@@ -35,8 +35,10 @@ export function CreateTmiClient(clientConfig: Config): Client {
 export async function AddChannelToPool(client: Client, channelName: string): Promise<boolean> {
 	let successfulAttempt: boolean = false;
 	let isToTwitchUsernameStandard: boolean = false;
+	let isInTMIChannelPool: boolean = false;
 	console.log(`[PROCESS] Preparing to add ${channelName} to listener`);
 	const channelListBuffer: string[] = client.getChannels();
+	isInTMIChannelPool = channelListBuffer.includes(`#${channelName.toLowerCase()}`);
 
 	// Make sure the requested channel name is to Twitch username standards:
 	if (channelName.search(re) === 0) {
@@ -45,7 +47,7 @@ export async function AddChannelToPool(client: Client, channelName: string): Pro
 
 	if (isToTwitchUsernameStandard) {
 		// Checks if the channel is already in the channel name pool:
-		if (channelListBuffer.includes(`#${channelName.toLowerCase()}`) === false) {
+		if (isInTMIChannelPool === false) {
 			try {
 				await client.join(channelName);
 				successfulAttempt = true;
@@ -65,34 +67,10 @@ export async function AddChannelToPool(client: Client, channelName: string): Pro
 		console.log(`[SUCCESS] Successfully added ${channelName}`);
 	}
 
-	return successfulAttempt;
-}
-
-export function RemoveChannelFromPool(client: Client, channelName: string): boolean {
-	let successfulAttempt: boolean = false;
-	console.log(`[PROCESS] Preparing to remove ${channelName} from listener`);
-	const channelListBuffer: string[] = client.getChannels();
-
-	// Makes sure the channel name requested is actually in the channel name pool:
-	channelListBuffer.forEach(channelNameInList => {
-		if ((channelNameInList).toLowerCase() === (`#${channelName}`).toLowerCase()) {
-			try {
-				client.part(channelName).then;
-				successfulAttempt = true;
-			}
-			catch(e) {
-				console.log(`[ERROR] Couldn't remove the channel: ${channelName}\n\r'${e}'`);
-				successfulAttempt = false;
-			}
-		}
-	})
-
-	if (!successfulAttempt) {
-		console.log(`[ERROR] Failed to delete: ${channelName}`);
-	}
-
-	else {
-		console.log(`[SUCCESS] Successfully removed ${channelName}`);
+	// However, if the channel is already present, we still want to send a success attempt to the client:
+	if (isInTMIChannelPool === true) {
+		console.log(`[SUCCESS] However, ${channelName} is already present in the channel pool`);
+		successfulAttempt = true;
 	}
 
 	return successfulAttempt;

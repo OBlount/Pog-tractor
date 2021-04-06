@@ -9,13 +9,4 @@ export default {
             console.log(`[ERROR] Can't reach '${Api().getUri()}'`);
         }
     },
-
-    DeleteChannelFromClient(channelName: {channelName: string}) {
-        try {
-            return Api().post('deleteChannelFromClient', channelName);
-        }
-        catch {
-            console.log(`[ERROR] Can't reach '${Api().getUri()}'`);
-        }
-    }
 }
