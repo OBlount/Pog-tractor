@@ -1,8 +1,11 @@
 import { Client } from 'tmi.js';
-import { Config } from '../../@types/index';
+import { Config, IPog } from '../../@types/index';
+import { IncrementTallyInArr } from './utils';
 import tmi = require('tmi.js');
 
 const re: string = '^[a-zA-Z0-9_]{4,25}$';
+
+let POG_ARR: IPog[] = [  ];
 
 export function CreateTmiClient(clientConfig: Config): Client {
 	// Defined defaults:
@@ -50,6 +53,14 @@ export async function AddChannelToPool(client: Client, channelName: string): Pro
 		if (isInTMIChannelPool === false) {
 			try {
 				await client.join(channelName);
+
+				// Append the channel name into the POG_ARR which records globally:
+				const POG_TEMP: IPog = {
+					channelName: `#${channelName.toLocaleLowerCase()}`,
+					totalPogTally: 0
+				}
+				POG_ARR.push(POG_TEMP);
+
 				successfulAttempt = true;
 			}
 			catch(e) {
@@ -75,3 +86,30 @@ export async function AddChannelToPool(client: Client, channelName: string): Pro
 
 	return successfulAttempt;
 }
+
+export function DetectPog(client: Client): void {
+
+	client.on('message', (channel: string, message: tmi.ChatUserstate, self: string) => {
+		// If a message contains any emotes:
+		if (message['emotes-raw']) {
+			const rawEmoteString: string = message['emotes-raw'];
+			let rawEmoteArr: string[] = rawEmoteString.split('/');
+
+			// Check if the emotes-raw contains the PogChamp emote:
+			rawEmoteArr.forEach(emoteID => {
+				if (emoteID.includes('305954156:')) {
+					IncrementTallyInArr(POG_ARR, channel);
+				}
+			})
+		}
+
+		// As there's no official Pog-emote anymore, it is worth checking if the message contains 'pog' anywhere:
+		else {
+			if (self.toLowerCase().includes('pog')) {
+				IncrementTallyInArr(POG_ARR, channel);
+			}
+		}
+	})
+}
+
+export { POG_ARR };

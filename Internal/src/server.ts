@@ -3,7 +3,7 @@ import { Application } from 'express';
 import cors = require('cors');
 import routes from './routes';
 import { Config } from '../../@types';
-import { CreateTmiClient } from './pog-tractor';
+import { CreateTmiClient, DetectPog } from './pog-tractor';
 require('dotenv').config({path: '../.env'});
 
 // Configure an express application
@@ -31,9 +31,10 @@ const tmiTestConfig: Config = {
         reconnect: true,
         secure: true,
     },
-    channels: [ ]
+    channels: [  ]
 }
 
 // Create one TMI client with empty channels
 const liveClient = CreateTmiClient(tmiTestConfig);
+DetectPog(liveClient);
 export { liveClient };

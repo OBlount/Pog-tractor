@@ -1,9 +1,3 @@
-// The Pog Obj
-export interface Pog {
-    channelName: string;
-    pogRate: number;
-}
-
 // For Client Configs for a tmi.js client
 export interface Config {
     options: {
@@ -18,4 +12,10 @@ export interface Config {
         maxReconnectAttempts?: number;
     }
     channels: string[];
+}
+
+// POG_DICT type
+export interface IPog {
+    channelName: string;
+    totalPogTally: number;
 }
