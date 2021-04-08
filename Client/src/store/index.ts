@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         LiveTrackers: [  ] as string[],
-        POG_ARR: [  ] as IPog[]
+        POG_ARR: [  ] as IPog[],
+        Timer: 60
     },
     mutations: {
 
@@ -27,6 +28,14 @@ export default new Vuex.Store({
         CLEAR_POG_ARR: (state): void => {
             // Clear the array:
             state.POG_ARR = [  ]
+        },
+
+        TIMER_INC: (state): void => {
+            state.Timer --;
+        },
+
+        TIMER_RESET: (state): void => {
+            state.Timer = 60;
         }
     },
     actions: {
@@ -45,6 +54,14 @@ export default new Vuex.Store({
 
         CLEAR_POG_ARR: (context): void => {
             context.commit('CLEAR_POG_ARR');
+        },
+
+        TIMER_INC: (context): void => {
+            context.commit('TIMER_INC');
+        },
+
+        TIMER_RESET: (context): void => {
+            context.commit('TIMER_RESET');
         }
     },
     modules: {

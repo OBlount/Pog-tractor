@@ -9,10 +9,11 @@
         @keyup.enter="SubmitChannelNames()">
 
         <button @click="SubmitChannelNames()">Submit</button>
+        <br> <p>Refresh Timer: {{ $store.state.Timer }}</p>
 
         <ul class="TrackersList">
             <li class="TrackersList" v-for="(trackerName, index) in $store.state.LiveTrackers" :key="index">
-                <Tracker :channelName="trackerName"/>
+                <Tracker :channelName="trackerName" :pogRate="123"/>
             </li>
         </ul>
     </div>
@@ -72,6 +73,21 @@ export default class Home extends Vue {
         else if (currentStatusCode === 500) {
             console.log(currentStatusMsg);
         }
+    }
+
+    private TimerManager(): void {
+        this.$store.dispatch('TIMER_INC');
+        const currentTime: number = this.$store.state.Timer;
+
+        if (currentTime === 0) {
+            this.$store.dispatch('TIMER_RESET');
+            this.RequestChannelData();
+        }
+    }
+
+    private mounted() {
+        // When the page is loaded, begin the refresh countdown
+        setInterval(this.TimerManager, 1000);
     }
 }
 </script>
