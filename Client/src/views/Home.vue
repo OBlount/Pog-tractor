@@ -14,7 +14,7 @@
             <li class="TrackersList" v-for="(trackerName, index) in $store.state.LiveTrackers" :key="index">
                 <Tracker :channelName="trackerName"/>
             </li>
-        </ul>   
+        </ul>
     </div>
 </template>
 
@@ -22,6 +22,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import Tracker from '@/components/TrackerComponent.vue';
 import Services from '@/services/session';
+import { IPog } from '../../../@types';
 
 @Component({
   components: {
@@ -40,7 +41,7 @@ export default class Home extends Vue {
         const currentStatusMsg: string = res?.data.stmsg;
         if (currentStatusCode === 200) {
             console.log(currentStatusMsg);
-            this.$store.state.LiveTrackers.push(this.inputChannelValue);
+            this.$store.dispatch('ADD_TRACKER', this.inputChannelValue);
         }
 
         else if (currentStatusCode === 500) {
@@ -48,6 +49,29 @@ export default class Home extends Vue {
         }
 
         this.inputChannelValue = '';
+    }
+
+    private async RequestChannelData(): Promise<void> {
+        const res = await Services.RequestChannelData({
+            channelNames: this.$store.state.LiveTrackers as string[]
+        })
+
+        const currentStatusCode: number = res?.data.stcode;
+        const currentStatusMsg: string = res?.data.stmsg;
+        const currentDataRequested: IPog[] = res?.data.dataRequested;
+        if (currentStatusCode === 200) {
+            console.log(currentStatusMsg);
+
+            // Clear the original array:
+            this.$store.dispatch('CLEAR_POG_ARR');
+
+            // Append with the newly requested and updated data:
+            this.$store.dispatch('APPEND_TO_POG_ARR', currentDataRequested);
+        }
+
+        else if (currentStatusCode === 500) {
+            console.log(currentStatusMsg);
+        }
     }
 }
 </script>

@@ -1,6 +1,8 @@
 import { Application } from 'express';
 import { liveClient } from './server';
 import { AddChannelToPool, POG_ARR } from './pog-tractor';
+import { HandleDataReq } from './data-req-manager';
+import { IPog } from '../../@types';
 
 const serverOnBootTime: string = new Date().toLocaleString();
 
@@ -15,6 +17,26 @@ export default (server: Application) => {
         <p>Booted on the: ${serverOnBootTime}</p><br>
         <p>Channels in the pool:</p>
         <p>${tempChannelArray}</p>`);
+    })
+
+    server.post('/requestData', (req, res) => {
+        const customArr: IPog[] = HandleDataReq(req);
+        
+        if (customArr.length > 0) {
+            res.send ({
+                stcode: 200,
+                stmsg: 'REQUEST: SUCCESS',
+                dataRequested: customArr
+            })
+        }
+
+        else {
+            res.send({
+                stcode: 500,
+                stmsg: 'REQUEST: FAILURE - Something went wrong accessing the data',
+                dataRequested: {}
+            })
+        }
     })
 
     server.post('/addChannelToClient', async (req, res) => {
@@ -33,7 +55,7 @@ export default (server: Application) => {
         else {
             res.send({
                 stcode: 500,
-                stmsg: `Failed to add: ${channelNameInput}`,
+                stmsg: `FAILED TO ADD: ${channelNameInput}`,
                 totalNumChannels: liveClientChannelLength
             })
         }

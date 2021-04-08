@@ -9,4 +9,13 @@ export default {
             console.log(`[ERROR] Can't reach '${Api().getUri()}'`);
         }
     },
+
+    RequestChannelData(channelNames: {channelNames: string[]}) {
+        try {
+            return Api().post('requestData', channelNames);
+        }
+        catch {
+            console.log(`[ERROR] Can't reach '${Api().getUri()}'`);
+        }
+    }
 }
