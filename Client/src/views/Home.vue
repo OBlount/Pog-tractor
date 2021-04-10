@@ -9,11 +9,12 @@
         @keyup.enter="SubmitChannelNames()">
 
         <button @click="SubmitChannelNames()">Submit</button>
-        <br> <p>Refresh Timer: {{ $store.state.Timer }}</p>
+        <br>
+        <p>Refresh Timer: {{ $store.state.Timer }}</p>
 
         <ul class="TrackersList">
             <li class="TrackersList" v-for="(trackerName, index) in $store.state.LiveTrackers" :key="index">
-                <Tracker :channelName="trackerName" :pogRate="123"/>
+                <Tracker :channelName="trackerName" :pogTally="GetPogTally(trackerName)"/>
             </li>
         </ul>
     </div>
@@ -83,6 +84,24 @@ export default class Home extends Vue {
             this.$store.dispatch('TIMER_RESET');
             this.RequestChannelData();
         }
+    }
+
+    private GetPogTally(reqChannelName: string): number {
+        let pogTally: number = 0;
+        // Grab the POG_ARR:
+        const currentTempPogArr: IPog[] | undefined = this.$store.state.POG_ARR[0];
+
+        // Loop through the currentPogArrTemp:
+        if (currentTempPogArr) {
+            let index: number;
+            for (index = 0; index < currentTempPogArr.length; index++) {
+                if (currentTempPogArr[index].channelName === reqChannelName) {
+                    pogTally = currentTempPogArr[index].totalPogTally;
+                }
+            }
+        }
+
+        return pogTally;
     }
 
     private mounted() {

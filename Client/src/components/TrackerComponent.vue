@@ -2,8 +2,8 @@
     <div class="Tracker">
         <img id="DeleteButton" src="@/assets/DeleteButton.png" alt="Delete" @click="OnDelete()">
         <div class="TrackerContent">
-            <a target="_blank" :href="twitchLink">{{ channelName }}</a>
-            <p>Pog Rate: {{ pogRate }}</p>
+            <a target="_blank" :href="'https://www.twitch.tv/' + this.channelName">{{ channelName }}</a>
+            <p>Pog Tally: {{ pogTally }}</p>
             <!-- Future reference when implementing chart.js -->
             <canvas id="PogChart"></canvas>
         </div>
@@ -16,8 +16,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 export default class Tracker extends Vue {
     @Prop() public channelName!: string;
-    @Prop() private pogRate!: number;
-    private twitchLink: string = 'https://www.twitch.tv/' + this.channelName;
+    @Prop() public pogTally!: number;
 
     private async OnDelete(): Promise<void> {
         this.$store.dispatch('REMOVE_TRACKER', this.channelName);

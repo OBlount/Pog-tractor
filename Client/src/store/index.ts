@@ -4,11 +4,13 @@ import { IPog } from '../../../@types'
 
 Vue.use(Vuex)
 
+export const GLOBAL_REFRESH_RATE: number = 6;
+
 export default new Vuex.Store({
     state: {
         LiveTrackers: [  ] as string[],
         POG_ARR: [  ] as IPog[],
-        Timer: 60
+        Timer: GLOBAL_REFRESH_RATE
     },
     mutations: {
 
@@ -35,7 +37,7 @@ export default new Vuex.Store({
         },
 
         TIMER_RESET: (state): void => {
-            state.Timer = 60;
+            state.Timer = GLOBAL_REFRESH_RATE;
         }
     },
     actions: {
